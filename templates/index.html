@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🌾 Smart Crop & Irrigation Dashboard</title>
+    <style>
+        /* ===== Global Styles ===== */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #89f7fe, #66a6ff);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* ===== Card Container ===== */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 900px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+        }
+
+        /* ===== Icon Styling ===== */
+        .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            animation: pop 1.5s ease infinite alternate;
+        }
+
+        /* ===== Animated Gradients ===== */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ===== Keyframe Animations ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* ===== Text ===== */
+        .label {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #0077cc;
+            transition: color 0.5s ease;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            color: #fff;
+            margin-top: 30px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* ===== Custom Card Colors ===== */
+        .temp-card { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+        .hum-card { background: linear-gradient(135deg, #a1c4fd, #c2e9fb); }
+        .soil-card { background: linear-gradient(135deg, #d4fc79, #96e6a1); }
+        .crop-card { background: linear-gradient(135deg, #fbc2eb, #a6c1ee); }
+        .adv-card { background: linear-gradient(135deg, #fddb92, #d1fdff); }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.7em; }
+            .card { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🌾 Smart Crop & Irrigation Dashboard</h1>
+
+    <div class="dashboard">
+        <div class="card temp-card">
+            <div class="icon">🌡️</div>
+            <div class="label">Temperature</div>
+            <div class="value" id="temp">-- °C</div>
+        </div>
+
+        <div class="card hum-card">
+            <div class="icon">💧</div>
+            <div class="label">Humidity</div>
+            <div class="value" id="hum">-- %</div>
+        </div>
+
+        <div class="card soil-card">
+            <div class="icon">🌱</div>
+            <div class="label">Soil Moisture</div>
+            <div class="value" id="soil">-- %</div>
+        </div>
+
+        <div class="card crop-card">
+            <div class="icon">🌾</div>
+            <div class="label">Suggested Crop</div>
+            <div class="value" id="crop">--</div>
+        </div>
+
+        <div class="card adv-card">
+            <div class="icon">🚿</div>
+            <div class="label">Irrigation Advice</div>
+            <div class="value" id="advice">--</div>
+        </div>
+    </div>
+
+    <footer>Powered by Arduino + Python Flask + ML 🌱</footer>
+
+    <script>
+        async function fetchData() {
+            try {
+                const res = await fetch('/data');
+                const data = await res.json();
+
+                document.getElementById('temp').textContent = `${data.temp.toFixed(1)} °C`;
+                document.getElementById('hum').textContent = `${data.hum.toFixed(1)} %`;
+                document.getElementById('soil').textContent = `${data.soil.toFixed(1)} %`;
+                document.getElementById('crop').textContent = data.crop;
+                document.getElementById('advice').textContent = data.advice;
+
+                // Animate value change colors
+                animateColor('temp', '#ff6600');
+                animateColor('hum', '#0099ff');
+                animateColor('soil', '#22aa22');
+                animateColor('crop', '#9900cc');
+                animateColor('advice', '#0055aa');
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function animateColor(id, color) {
+            const el = document.getElementById(id);
+            el.style.color = color;
+            setTimeout(() => el.style.color = '#0077cc', 1000);
+        }
+
+        setInterval(fetchData, 2000);
+        fetchData();
+    </script>
+</body>
+</html>
