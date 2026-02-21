@@ -132,9 +132,9 @@ Python 3.10+
 Flask Web Framework
 
 🧑‍💻 Developer
-👤 Name: Abhinay Somnath Sonavane
-         Nikhil Khosare
-         Sandip Randive
-         Abhishek Bhoite
+👤 Name: Nikhil Ashok Khosare
+         Abhinay Somnath Sonavane
+         Sandip Parmeshwar Randive
+         Abhishek Srikisan Bhoite
          
          
